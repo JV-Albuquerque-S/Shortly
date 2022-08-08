@@ -61,3 +61,29 @@ export async function urlShortener(req, res){
         res.sendStatus(500);
     }
 }
+
+export async function deleteUrl(req, res){
+    const {user} = res.locals;
+    const {id} = req.params;
+
+    try{
+        const find = await urlsRepository.getUrl(id);
+        if(!find.rowCount){
+            res.sendStatus(404);
+        }
+        else{
+            const [url] = find.rows;
+            if(url.userId !== user.id){
+                res.sendStatus(401);
+            }
+            else{
+                await urlsRepository.deleteUrl(id);
+                res.sendStatus(204);
+            }
+        }
+    }
+    catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+}
