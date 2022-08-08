@@ -6,22 +6,21 @@ import usersRepository from "../repositiries/usersRepository.js";
 import sessionRepository from "../repositiries/sessionsRepository.js";
 
 export async function singUp(req, res){
-    const user = req.body;
     const {name, email, password} = req.body;
 
     try{
-        const alreadyExist = usersRepository.checkEmail(user.email);
-        if(alreadyExist.rowCount<=0){
-            await authRepository.singUp(name, email, password);
-            res.sendStatus(201);
+        const alreadyExist = usersRepository.checkEmail(email);
+        if(alreadyExist.rowCount>0){
+            res.sendStatus(409);
         }
         else{
-            res.sendStatus(409);
+            await authRepository.singUp(name, email, password);
+            res.sendStatus(201);
         }
     }
     catch(e){
         console.log(e);
-        res.sendStatus(500);
+        res.sendStatus(409);
     }
 }
 

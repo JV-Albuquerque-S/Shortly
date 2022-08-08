@@ -5,17 +5,22 @@ async function getUrl(id){
 }
 
 async function getShortUrl(url){
-    return db.query(`SELECT * FROM urls WHERE "shortUrl = $1`, [url]);
+    return db.query(`SELECT * FROM urls WHERE "shortUrl" = $1`, [url]);
 }
 
 async function updateVisits(id){
     return db.query(`UPDATE urls SET views = views + 1 WHERE id = $1`, [id]);
 }
 
+async function postUrl(url, shortUrl, id){
+    return db.query(`INSERT INTO urls (url, "shortUrl", "userId") VALUES ($1, $2, $3)`, [url, shortUrl, id]);
+}
+
 const urlsRepository = {
     getUrl,
     getShortUrl,
-    updateVisits
+    updateVisits,
+    postUrl
 }
 
 export default urlsRepository;

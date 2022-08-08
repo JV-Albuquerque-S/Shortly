@@ -12,9 +12,14 @@ async function checkEmail(email){
     return db.query(`SELECT * FROM users WHERE email = $1`, [email]);
 }
 
+async function getUser(id){
+    return db.query(`SELECT * FROM users WHERE id = $1`, [id]);
+}
+
 const usersRepository = {
     getUsersRanked,
-    checkEmail
+    checkEmail,
+    getUser
 }
 
 export default usersRepository;
