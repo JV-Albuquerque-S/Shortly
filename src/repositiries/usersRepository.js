@@ -3,8 +3,8 @@ import db from "../db.js";
 async function getUsersRanked(){
     return db.query(`SELECT u.id, u.name, 
     COUNT(ur.id) as "linksCount", 
-    SUM(ur.views) as "visitCount"
-    FROM urls ur JOIN users u ON ur."userId" = u.id
+    CASE WHEN SUM(ur.views) is NULL THEN 0 ELSE SUM(ur.views) END as "visitCount"
+    FROM users u LEFT JOIN urls ur ON ur."userId" = u.id
     GROUP BY u.id ORDER BY "visitCount" DESC LIMIT 10`);
 }
 
