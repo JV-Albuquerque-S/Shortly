@@ -20,12 +20,22 @@ async function deleteUrl(id){
     return db.query(`DELETE FROM urls WHERE urls.id = $1`, [id]);
 }
 
+async function getUsersViews(userId){
+    return db.query(`SELECT SUM(u.views) FROM urls u WHERE u."userId" = $1`, [userId]);
+}
+
+async function getUsersUrl(userId){
+    return db.query(`SELECT * FROM urls WHERE urls."userId" = $1`, [userId])
+}
+
 const urlsRepository = {
     getUrl,
     getShortUrl,
     updateVisits,
     postUrl,
-    deleteUrl
+    deleteUrl,
+    getUsersViews,
+    getUsersUrl
 }
 
 export default urlsRepository;
